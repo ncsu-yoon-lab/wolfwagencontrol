@@ -1,4 +1,4 @@
-const rosApiUrl = 'http://10.138.194.205:5000'; // Replace with your ROS API endpoint
+const rosApiUrl = 'http://192.168.1.100:5000'; // Replace with your ROS API endpoint
 
 async function sendCommand(throttle, steering) {
     const command = {
