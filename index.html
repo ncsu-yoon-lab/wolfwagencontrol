@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control System</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="frontend.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -120,6 +120,7 @@
             <button id="right">Right</button>
         </div>
         <div><p>A and D: 50% turn, L/R arrow 100% turn, W and S keys for throttle</p></div>
+        <div>Battery: <span id="batteryValue">0</span></div>
     </div>
     <div class="map-container" id="map"></div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -128,7 +129,7 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDV9kKVPmdtgJT5kv_07VqiavryJUOwpy4&callback=initMap">
     </script>
     <div class="feed-container">
-        <iframe src="http://10.138.194.205:8080/stream_viewer?topic=/zed/zed_node/right/image_rect_color"></iframe>
+        <iframe src="http://localhost:8080/stream_viewer?topic=/zed/zed_node/right/image_rect_color"></iframe>
     </div>
 </body>
 </html>
