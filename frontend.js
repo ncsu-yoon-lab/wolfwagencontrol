@@ -1,4 +1,4 @@
-const rosApiUrl = 'http://10.138.194.205:5000'; // Replace with your ROS API endpoint
+const rosApiUrl = 'http://127.0.0.1:5000'; // Replace with your ROS API endpoint
 
 async function sendCommand(throttle, steering) {
     const command = {
@@ -15,6 +15,21 @@ async function sendCommand(throttle, steering) {
         }
     } catch (error) {
         console.error('Error sending command:', error);
+    }
+}
+
+async function fetchBatteryData() {
+    try {
+        const response = await axios.get(`${rosApiUrl}/battery`);
+        if (response.status === 200) {
+            const batteryValue = response.data.battery;
+            console.log(`Battery value: ${batteryValue}`);  // Debug print
+            document.getElementById('batteryValue').textContent = batteryValue.toFixed(2); // Display with 2 decimal places
+        } else {
+            console.error('Failed to fetch battery data');
+        }
+    } catch (error) {
+        console.error('Error fetching battery data:', error);
     }
 }
 
@@ -59,19 +74,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (direction === 'Left') {
             leftButton.style.backgroundColor = 'red';
             rightButton.style.backgroundColor = '';
-            steeringValue = 100;
+            steeringValue = -100;
         } else if (direction === 'Right') {
             rightButton.style.backgroundColor = 'red';
             leftButton.style.backgroundColor = '';
-            steeringValue = -100;
+            steeringValue = 100;
         } else if (direction === 'halfRight') {
             rightButton.style.backgroundColor = 'orange';
             leftButton.style.backgroundColor = '';
-            steeringValue = -50;
+            steeringValue = 50;
         } else if (direction === 'halfLeft') {
             leftButton.style.backgroundColor = 'orange';
             rightButton.style.backgroundColor = '';
-            steeringValue = 50;
+            steeringValue = -50;
         }
         sendCommand(parseInt(throttleSlider.value), steeringValue);
     };
@@ -115,6 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 25);
     };
+
+    // Fetch battery data every 5 seconds
+    setInterval(fetchBatteryData, 250);
 
     // Event listeners for buttons
     leftButton.addEventListener('mousedown', () => handleSteering('Left'));
