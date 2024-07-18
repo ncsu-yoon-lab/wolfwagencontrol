@@ -24,13 +24,17 @@ async function fetchBatteryData() {
         if (response.status === 200) {
             const batteryValue = response.data.battery;
             console.log(`Battery value: ${batteryValue}`);  // Debug print
-            if (0 < batteryValue.value < 100) {
-                document.getElementById('batteryValue').textContent = batteryValue.toFixed(2); // Display with 2 decimal places
-            } else if (batteryValue.value > 100) {
-                document.getElementById('batteryValue').textContent = "100"; 
-            } else if (batteryValue.value < 0){
-                document.getElementById('batteryValue').textContent = "0";
+            
+            let displayValue = 0;
+            if (batteryValue > 100) {
+                displayValue = 100;
+            } else if (batteryValue < 0) {
+                displayValue = 0;
+            } else {
+                displayValue = batteryValue;
             }
+            
+            document.getElementById('batteryValue').textContent = displayValue.toFixed(2); // Display with 2 decimal places
         } else {
             console.error('Failed to fetch battery data');
         }
@@ -38,6 +42,7 @@ async function fetchBatteryData() {
         console.error('Error fetching battery data:', error);
     }
 }
+
 
 
 async function initMap() {
