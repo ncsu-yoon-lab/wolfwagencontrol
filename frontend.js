@@ -18,11 +18,13 @@ async function sendCommand(throttle, steering) {
     }
 }
 
+let lastBatteryValue = null;
+
 async function fetchBatteryData() {
     try {
         const response = await axios.get(`${rosApiUrl}/battery`);
         if (response.status === 200) {
-            const batteryValue = response.data.battery;
+            const batteryValue = parseFloat(response.data.battery); // Ensure the battery value is a float
             console.log(`Battery value: ${batteryValue}`);  // Debug print
             
             let displayValue = 0;
@@ -32,6 +34,13 @@ async function fetchBatteryData() {
                 displayValue = 0;
             } else {
                 displayValue = batteryValue;
+            }
+            
+            if (lastBatteryValue !== null && displayValue - lastBatteryValue > 3) {
+                console.warn(`Ignoring battery value: ${displayValue}, using last value: ${lastBatteryValue}`);
+                displayValue = lastBatteryValue;
+            } else {
+                lastBatteryValue = displayValue;
             }
             
             document.getElementById('batteryValue').textContent = displayValue.toFixed(2); // Display with 2 decimal places
